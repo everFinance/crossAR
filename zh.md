@@ -8,20 +8,22 @@ everPay 是一个基于 Arweave 构建的跨链的代币支付结算协议（[ev
 
 ## 工作原理
 
-everPay 在以太坊上拥有一个多签 ethLocker 合约，ethLocker 可以执行任意的以太坊操作。保管人运行资管节点，加载 Arweave 上的提案去执行以太坊多签。
+everPay 的所有账本透明的记录在 Arweave 上，由多个保管人共同维护账本。
 
-一种最常见的提案是用户提现 ETH/ERC20：
+ethLocker 是 everPay 在以太坊上的多签资管合约，ethLocker 可以执行任意的以太坊操作。保管人根据 Arweave 上的交易生成提案执行以太坊多签。
+
+一种最常见的提案是用户提现 ETH/ERC20，提案在第 4 步产生：
 
 1. 用户1 将 ETH 转入 ethLocker
 2. everPay 为用户1 映射出等值的 ETH（ever）
 3. 用户1 将 ETH（ever）转给用户2
 4. 用户2 Burn ETH（ever）
 
-1-4 的每笔交易都会序列化存储在 Arweave 上。第 4 步用户2 的 Burn 行为就形成了一个 ETH 提现的提案。保管人通过 Arweave 的数据可以验证所有交易过程，并确保 Burn 提案的正确性，签署一份多签提案发送给 ethLocker 合约。
+1-4 的每笔交易都会序列化存储在 Arweave 上。第 4 步用户2 的 Burn 事件形成了一个 ETH 提现的提案。每个保管人都通过 Arweave 的数据验证所有交易过程，并确保 Burn 提案的正确性，然后才签署一份提现指令发送到 ethLocker 合约。
 
 ### AR（ever）
 
-与 Ethereum 上的多签不一样的是，everPay 使用门限签名技术保管 AR（Arweave），将 AR（Arweave）映射到 everPay 中生成等价的 AR（ever）。
+与 Ethereum 上的多签不一样的是，everPay 使用门限签名技术保管 AR（Arweave），将 AR（Arweave）映射到 everPay 中生成等额的 AR（ever）。
 
 ### AR（Arweave）到 AR（Ethereum）
 
@@ -40,6 +42,9 @@ everPay 在以太坊上拥有一个多签 ethLocker 合约，ethLocker 可以执
 部署一个 AR（ERC20）到 Ethereum，ERC20 的 mint owner 为 ethLocker。
 
 改进原 AR 提案，新增一个 BurnToEthereum 提案：
+
+1. 用户1 将 AR 转入 ArLocker
+2. everPay 为用户1 映射出等值的 AR（ever）
 
 3. 用户1 BurnToEthereum AR（ever）
 
